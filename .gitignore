@@ -1,0 +1,10 @@
+# python shit
+package/*
+.venv/*
+
+# editor shit
+.*.un~
+*~
+*.swp
+
+deployment.zip
