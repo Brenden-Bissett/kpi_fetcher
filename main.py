@@ -85,16 +85,24 @@ def main(event, context):
     }
     return json.dumps(
         {
-            "description": "A collection of average durations from Exact's CI pipeline for runs on master over the last 2 weeks. These are segmented by passing/failing, as well as a summary of the 10 most recent in each category.",
+            "description": (
+                "A collection of average durations from Exact's CI pipeline for runs "
+                "on master over the last 2 weeks. These are segmented by passing/"
+                "failing, as well as a summary of the 10 most recent in each category."
+            ),
             "data as of": datetime.now().isoformat(),
             "data from": (datetime.now() - timedelta(weeks=2)).isoformat(),
             "average durations": segmented_durations,
             "pipeline counts": counts,
-            "passing rates": passing_rates
+            "passing rates": passing_rates,
         },
         indent=4,
         sort_keys=False,
-    )  + f"\n\n\n---\n\n\nPasses/runs\n{counts['master_passing_runs_last_two_weeks']}/{counts['master_runs_last_two_weeks']} -> {passing_rates['last_two_weeks']}\n\n\nTwo weeks pipeline duration\n{segmented_durations['last_two_weeks']}"
+    ) + (
+        f"\n\n---\n\nPasses/runs\n{counts['master_passing_runs_last_two_weeks']}/"
+        f"{counts['master_runs_last_two_weeks']} -> {passing_rates['last_two_weeks']}"
+        f"\n\nTwo weeks pipeline duration\n{segmented_durations['last_two_weeks']}"
+    )
 
 
 def process_run(run):
