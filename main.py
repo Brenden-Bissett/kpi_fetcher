@@ -2,6 +2,7 @@ import json
 import os
 from datetime import date, datetime, timedelta
 from pprint import pprint
+from dotenv import load_dotenv
 
 import requests
 import humanize
@@ -11,6 +12,8 @@ from tqdm import tqdm
 ORG_URL = "https://dev.azure.com/henryscheinone/Development/_apis"
 API_VERSION = "?api-version=6.1-preview.1"
 PIPELINE_ID_EXACT_CI = 139
+
+load_dotenv()
 
 SESSION = requests.Session()
 SESSION.auth = HTTPBasicAuth("", os.environ.get("AZURE_DEVOPS_PAT"))
@@ -30,6 +33,7 @@ def main(event, context):
     counts["all_runs_last_two_weeks"] = len(pipeline_list)
 
     print(f"Found {len(pipeline_list)} pipeline runs...")
+
     print("Fetching details")
     # Now fetch some details for each, and stash them onto the same dict
     for run in tqdm(pipeline_list):
@@ -119,13 +123,24 @@ def get_average_duration(run_list):
 
 
 def is_master(run_detail):
-    if (
-        run_detail["resources"]["repositories"]["self"]["refName"]
-        == "refs/heads/master"
-    ):
-        return True
-    return False
 
+    try:
+
+        if (
+            run_detail["resources"]["repositories"]["self"]["refName"]
+            == "refs/heads/master"
+        ):
+            return True
+        return False
+
+    except Exception as e:
+        print ("RUN_DETAIL ---------------------")
+        print(run_detail)
+        print ("EXCEPTION ---------------------")
+        print(e)
+        print ("---------------------")
+    
+    return False
 
 def is_recent(run):
     age = datetime.now() - datetime.fromisoformat(run["createdDate"][:16])

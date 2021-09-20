@@ -1,6 +1,7 @@
 # python shit
 package/*
 .venv/*
+*.env
 
 # editor shit
 .*.un~

@@ -14,6 +14,10 @@ This is meant to be a supplement to the analytics and reporting that natively co
 * Uses someones personal access token XP
 
 
+## Requirements
+
+* Create ".env" file, with "AZURE_DEVOPS_PAT" property containing API Token. (As set up in Azure Devops)
+
 ## Where does it run?
 
 In AWS Lambda, inside the account `soei-sandbox` in the ap-southeast-2 region. [here is a link](https://ap-southeast-2.console.aws.amazon.com/lambda/home?region=ap-southeast-2#/functions/cam_exact_pipeline_duration_kpi).
