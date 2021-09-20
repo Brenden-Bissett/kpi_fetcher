@@ -3,11 +3,26 @@ import os
 from datetime import date, datetime, timedelta
 from pprint import pprint
 from dotenv import load_dotenv
+import logging
 
 import requests
 import humanize
 from requests.auth import HTTPBasicAuth
 from tqdm import tqdm
+
+# Gets or creates a logger
+logger = logging.getLogger(__name__)  
+
+# set log level
+logger.setLevel(logging.INFO)
+
+# define file handler and set formatter
+file_handler = logging.FileHandler('logfile.log')
+formatter    = logging.Formatter('%(asctime)s : %(levelname)s : %(name)s : %(message)s')
+file_handler.setFormatter(formatter)
+
+# add file handler to logger
+logger.addHandler(file_handler)
 
 ORG_URL = "https://dev.azure.com/henryscheinone/Development/_apis"
 API_VERSION = "?api-version=6.1-preview.1"
@@ -18,7 +33,6 @@ load_dotenv()
 SESSION = requests.Session()
 SESSION.auth = HTTPBasicAuth("", os.environ.get("AZURE_DEVOPS_PAT"))
 SESSION.headers.update({"content-type": "application/json"})
-
 
 def main(event, context):
     counts = {}
@@ -134,11 +148,8 @@ def is_master(run_detail):
         return False
 
     except Exception as e:
-        print ("RUN_DETAIL ---------------------")
-        print(run_detail)
-        print ("EXCEPTION ---------------------")
-        print(e)
-        print ("---------------------")
+        logger.info(run_detail)
+        logger.error(f'{e}')
     
     return False
 

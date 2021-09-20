@@ -9,3 +9,6 @@ package/*
 *.swp
 
 deployment.zip
+
+# Files
+logfile.log
